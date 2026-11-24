@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ironleaf · Workout Planner Flutter UI Kit · Live demo</title>
+  <meta name="description" content="Try Ironleaf in your browser: a workout planner Flutter UI kit with 36 screens, dark and light modes and responsive layouts.">
+  <link rel="icon" type="image/png" href="app/favicon.png">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0e0a;
+      --bg-2: #10160d;
+      --text: #f1f5ec;
+      --muted: #9aa592;
+      --accent: #b9f23f;
+      --frame: #1a2016;
+      --frame-edge: #2e3828;
+      --app: #0b0e0a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background:
+        radial-gradient(circle at 50% -10%, rgba(185, 242, 63, 0.16), transparent 45%),
+        radial-gradient(circle at 0 100%, rgba(62, 142, 42, 0.18), transparent 40%),
+        linear-gradient(var(--bg), var(--bg-2));
+      color: var(--text);
+      font-family: -apple-system, system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    /* Phone is laid out at real iPhone size, then scaled to fit the window. */
+    .stage { width: 417px; height: 876px; flex: none; transform-origin: center; }
+    .phone {
+      position: relative;
+      width: 417px;
+      height: 876px;
+      padding: 12px;
+      border-radius: 64px;
+      background: var(--frame);
+      box-shadow: 0 0 0 2px var(--frame-edge), 0 40px 90px rgba(0, 0, 0, 0.55);
+    }
+    .phone::before, .phone::after { content: ""; position: absolute; width: 4px; background: var(--frame-edge); border-radius: 2px; }
+    .phone::before { left: -5px; top: 170px; height: 100px; }
+    .phone::after { right: -5px; top: 220px; height: 120px; }
+    .screen { position: relative; width: 393px; height: 852px; border-radius: 52px; overflow: hidden; background: var(--app); }
+    iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+    .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 124px; height: 36px; border-radius: 20px; background: #000; pointer-events: none; z-index: 3; }
+    .caption { flex: none; margin-top: 18px; font-size: 13px; color: var(--muted); text-align: center; }
+    .caption a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .caption a:hover { text-decoration: underline; }
+    .sep { margin: 0 8px; opacity: 0.5; }
+    /* On a real phone, skip the frame and run the app full screen. */
+    @media (max-width: 500px) {
+      body { display: block; }
+      .stage, .phone, .screen { width: 100%; height: 100%; transform: none !important; }
+      .phone { padding: 0; border-radius: 0; box-shadow: none; background: var(--app); }
+      .phone::before, .phone::after, .island, .caption { display: none; }
+      .screen { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="phone">
+      <div class="screen">
+        <iframe id="app" title="Ironleaf app"></iframe>
+        <div class="island"></div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">
+    Built with Flutter<span class="sep">·</span>36 screens · dark + light<span class="sep">·</span>
+    <a href="https://yaqoobdeveloper.com/ui-kits/ironleaf-workout-planner-flutter-ui-kit" target="_blank" rel="noopener">Get the source code →</a>
+  </p>
+  <script>
+    const framed = window.innerWidth > 500;
+    // In the phone frame the app gets iPhone-like safe areas and a status bar.
+    document.getElementById('app').src = framed ? 'app/?frame=1' : 'app/';
+    const stage = document.getElementById('stage');
+    function fit() {
+      if (window.innerWidth <= 500) { stage.style.transform = ''; stage.style.margin = ''; return; }
+      const scale = Math.min(1, (window.innerHeight - 70) / 876, (window.innerWidth - 32) / 417);
+      stage.style.transform = `scale(${scale})`;
+      const gap = (876 * (1 - scale)) / 2;
+      stage.style.margin = `${-gap}px 0`;
+    }
+    fit();
+    window.addEventListener('resize', fit);
+  </script>
+</body>
+</html>
